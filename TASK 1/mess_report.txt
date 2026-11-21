@@ -1,0 +1,7 @@
+Register Number | Name | Amount
+19231001 | Asha | 1250.50
+19231002 | Bala | 980.00
+19231004 | Divya | 1500.75
+19231005 | Ezhil | 1200.00
+TOTAL | | 4931.25
+Rejected records: 1
