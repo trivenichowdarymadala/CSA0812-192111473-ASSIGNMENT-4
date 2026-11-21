@@ -1,0 +1,24 @@
+START
+  RECEIVE input file name
+  SET total to 0; accepted list and rejected list to empty
+  TRY to open file in read mode with UTF-8 encoding
+    FOR each line with its line number
+      IF line is blank, CONTINUE
+      TRY
+        SPLIT line into fields using CSV parsing
+        IF field count is not 3, RAISE invalid-record error
+        EXTRACT register number, student name and amount
+        VALIDATE register number and name are not empty
+        CONVERT amount to floating-point number
+        IF amount is negative, RAISE invalid-value error
+        ADD amount to total and append record to accepted list
+      EXCEPT record-format or numeric error
+        APPEND line number, original line and reason to rejected list
+    END FOR
+  EXCEPT missing-file or permission error
+    DISPLAY file error
+    STOP
+  CLOSE file automatically
+  WRITE accepted records, total and rejected count to report
+  DISPLAY report and rejected-line details
+STOP
