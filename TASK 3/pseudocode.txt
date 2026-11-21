@@ -1,0 +1,19 @@
+START
+  DEFINE InvalidRecord exception
+  DEFINE parse_line(line)
+    SPLIT line by comma
+    IF number of fields is not exactly 3, RAISE InvalidRecord
+    IF register/date is empty or status is not P/A, RAISE InvalidRecord
+    RETURN register, date, status
+  DEFINE summarise(path)
+    SET present = 0, absent = 0, errors = empty list
+    OPEN path using WITH and UTF-8 encoding
+    FOR each line with line number
+      SKIP blank lines
+      TRY parse_line
+        INCREMENT present or absent based on status
+      EXCEPT InvalidRecord
+        APPEND line number and message to errors
+    RETURN present, absent, errors
+  HANDLE missing file, permission and decoding errors at caller level
+STOP
