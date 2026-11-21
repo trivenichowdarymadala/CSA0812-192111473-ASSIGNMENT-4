@@ -1,0 +1,2 @@
+Book A returned
+Book B returned

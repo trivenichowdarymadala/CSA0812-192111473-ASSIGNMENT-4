@@ -1,0 +1,15 @@
+START
+  DEFINE save_returns(books, log_path)
+    OPEN log in APPEND mode with UTF-8 and newline handling
+    FOR each book
+      WRITE book text followed by exactly one newline
+    CLOSE log automatically
+  DEFINE process(day_file, log_path)
+    OPEN daily file using WITH
+    READ non-empty book-return lines
+    CALL save_returns
+  FOR each of the three daily files
+    TRY process
+    CATCH missing-file, permission or decoding errors and report them
+  DISPLAY final log
+STOP
