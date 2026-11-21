@@ -1,0 +1,31 @@
+START
+  SET input directory to department data folder
+  SET output directory to output folder
+  CREATE master dictionary keyed by register number
+  CREATE error list
+  LIST all department_*.txt files in sorted order
+  FOR each department file
+    TRY read file line by line with line numbers
+      FOR each non-empty line
+        TRY
+          SPLIT into five fields: register, name, department, email, events
+          VALIDATE field count and required values
+          VALIDATE email using string pattern
+          SPLIT selected events by semicolon
+          IF register already exists in master
+            RECORD duplicate error
+          ELSE
+            STORE validated registration in master
+          END IF
+        EXCEPT invalid-registration error
+          RECORD file, line and reason
+      END FOR
+    EXCEPT missing, permission, decoding or OS error
+      RECORD file error
+  END FOR
+  GROUP unique registrations by selected event
+  WRITE master list
+  WRITE separate participant list for each event
+  WRITE summary and error log
+  DISPLAY totals
+STOP
