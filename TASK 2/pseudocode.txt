@@ -1,0 +1,29 @@
+START
+  RECEIVE daily-file folder and output folder
+  CREATE empty dictionary attendance_counts
+  CREATE empty damaged-record list
+  LIST and SORT all daily text files in the folder
+  FOR each daily file
+    TRY to open using UTF-8
+      FOR each line with line number
+        SKIP blank lines
+        SPLIT line by comma
+        IF field count is not 3 OR a required field is missing
+           OR status is not P or A
+          RECORD file name, line number and reason as damaged
+        ELSE
+          GET register number, date and status
+          CREATE [present, absent] counters if student is new
+          INCREMENT the matching counter
+        END IF
+      END FOR
+    CATCH file access or decoding error and log it
+  END FOR
+  FOR each student in sorted register order
+    CALCULATE percentage = present / (present + absent) * 100
+    WRITE percentage report row
+    IF percentage is below 75, WRITE low-attendance row
+  END FOR
+  WRITE damaged-line log
+  DISPLAY summary
+STOP
